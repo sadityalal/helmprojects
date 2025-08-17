@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontend.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+{{- range $key, $value := .Values.frontend.labels }}
+    {{ $key }}: {{ $value }}
+{{- end }}
+
+
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+{{- range $key, $value := .Values.frontend.labels }}
+      {{ $key }}: {{ $value }}
+{{- end }}
+  template:
+    metadata:
+      name: {{ .Values.frontend.name }}
+      labels:
+{{- range $key, $value := .Values.frontend.labels }}
+        {{ $key }}: {{ $value }}
+{{- end }}
+    spec:
+      containers:
+        - name: {{ .Values.frontend.name }}
+          image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
+          ports:
+          - containerPort: {{ .Values.frontend.service.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.backend.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+{{- range $key, $value := .Values.backend.labels }}
+    {{ $key }}: {{ $value }}
+{{- end }}
+
+spec:
+  replicas: {{ .Values.backend.replicas }}
+  selector:
+    matchLabels:
+{{- range $key, $value := .Values.backend.labels }}
+      {{ $key }}: {{ $value }}
+{{- end }}
+  template:
+    metadata:
+      name: {{ .Values.backend.name }}
+      labels:
+{{- range $key, $value := .Values.backend.labels }}
+        {{ $key }}: {{ $value }}
+{{- end }}
+    spec:
+      containers:
+        - name: {{ .Values.backend.name }}
+          image: "{{ .Values.backend.image }}:{{ .Values.backend.tag }}"
+          ports:
+          - containerPort: {{ .Values.backend.service.port }}

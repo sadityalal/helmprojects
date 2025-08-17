@@ -1,0 +1,32 @@
+frontend:
+  enabled: true
+  name: frontend-app
+  image: docker.io/saurabhred/nginxjs
+  tag: latest
+  labels:
+    tier: frontend
+    app: nginx-app
+  replicas: 2
+  service:
+    name: frontend-svc
+    type: NodePort
+    port: 80
+    nodePort: 30080
+
+backend:
+  enabled: true
+  name: backend-app
+  image: docker.io/saurabhred/pythonback
+  tag: latest
+  labels:
+    tier: backend
+    app: python-backend
+  replicas: 2
+  service:
+    name: backend-svc
+    type: ClusterIP
+    port: 5000
+
+namespace: project1
+
+

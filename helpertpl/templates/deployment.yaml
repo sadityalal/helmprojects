@@ -1,0 +1,56 @@
+{{- if .Values.frontend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helpertpl.name" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include  "helpertpl.labels" . | nindent 4 }}
+
+
+spec:
+  replicas: {{ default 1 .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      {{- include  "helpertpl.labels" . | nindent 6 }}
+  template:
+    metadata:
+      name: {{ .Values.frontend.name }}
+      labels:
+        {{- include  "helpertpl.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.frontend.name }}
+          image: "{{ .Values.frontend.image }}:{{ .Values.frontend.tag }}"
+          ports:
+          - containerPort: {{ .Values.frontend.service.port }}
+{{- end }}
+---
+
+{{- if .Values.backend.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helpertplback.name" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include  "helpertplback.labels" . | nindent 4 }}
+
+
+spec:
+  replicas: {{ default 1 .Values.backend.replicas }}
+  selector:
+    matchLabels:
+      {{- include  "helpertplback.labels" . | nindent 6 }}
+  template:
+    metadata:
+      name: {{ .Values.backend.name }}
+      labels:
+        {{- include  "helpertplback.labels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Values.backend.name }}
+          image: "{{ .Values.backend.image }}:{{ .Values.backend.tag }}"
+          ports:
+          - containerPort: {{ .Values.backend.service.port }}
+{{- end}}

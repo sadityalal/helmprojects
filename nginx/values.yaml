@@ -1,0 +1,29 @@
+replicaCount: 1
+
+labels:
+  tier: frontend
+  app: nginx-app
+
+image:
+  name: nginx:latest
+  pullPolicy: IfNotPresent
+
+ports:
+  type: NodePort
+  nodePort: 30080
+  protocol: TCP
+  targetPort: 80
+  port: 80
+
+serviceAccount:
+  create: true
+  name: nginxsa
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
