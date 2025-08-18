@@ -1,0 +1,8 @@
+{{- range $name, $data := .Values.services }}
+apiVersion: v1
+kind: Services
+metadata:
+  name: {{ $name }}-svc
+spec:
+  selector:
+

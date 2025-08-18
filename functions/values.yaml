@@ -1,0 +1,55 @@
+name:
+  frontend:
+    enabled: true
+    image: nginx
+    tag: latest
+    replicas: 2
+    labels:
+      tier: frontend
+      app: nginx-app
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    service:
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+      type: NodePort
+  
+  backend:
+    enabled: true
+    image: mysql
+    tag: 8.0.23
+    replicas: 2
+    labels:
+      tier: database
+      app: mysql-app
+    readinessProbe:
+      tcpSocket:
+        port: 3360
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    livenessProbe:
+      tcpSocket:
+        port: 3306
+      initialDelaySeconds: 10
+      periodSeconds: 10
+
+services:
+  frontend:
+    type: NodePort
+    nodePort: 30080
+    targetPort: 80
+  backend:
+    type: ClusterIP
+    clusterIP: ""
+    targetPort: 3306

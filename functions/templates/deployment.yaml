@@ -1,0 +1,30 @@
+{{- range $name, $svc := .Values.name }}
+{{- if $svc.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: {{ $name }}-deployment
+    labels:
+{{ $svc.labels | toYaml | indent 8 }}
+spec:
+    selector:
+        matchLabels:
+{{ $svc.labels | toYaml | indent 12 }}
+    replicas: {{ $svc.replicas }}
+    template:
+        metadata:
+            labels:
+{{ $svc.labels | toYaml | indent 16 }}
+        spec:
+            containers:
+              - name: {{ $name }}
+                image: {{ $svc.image }}
+                ports:
+                - containerPort: 80
+            readinessProbe:
+{{ $svc.readinessProbe | toYaml | indent 16 }}
+            livenessProbe:
+{{ $svc.livenessProbe | toYaml | indent 16 }}             
+                
+{{- end }}
+{{- end }}
