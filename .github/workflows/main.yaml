@@ -11,7 +11,7 @@ jobs:
     runs-on: local
     steps:
       - name: first
-        uses: actions/checkout@c4
+        uses: actions/checkout@v4
       - name: message
-        uses: echo "Hi"
+        run: echo "Hi"
 
