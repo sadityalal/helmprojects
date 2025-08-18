@@ -1,0 +1,15 @@
+name: Hello
+
+on:
+  push:
+    branches: [ main ]  # change if your default branch isn't 'main'
+
+jobs:
+  hello:
+    runs-on: local
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4   # <-- our single action for this step
+      - name: Say hi
+        run: echo "Hello from GitHub Actions 🚀"
+
