@@ -13,5 +13,5 @@ jobs:
       - name: first
         uses: actions/checkout@v4
       - name: message
-        run: docker run hello-world
+        run: docker run -itd -p 8082:80 --name nginx nginx:latest
 
